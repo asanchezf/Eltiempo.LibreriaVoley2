@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">El tiempo</string>
+    <string name="ciudad">Introduce el nombre de la ciudad</string>
+
+    <string name="eltiempo_salir">Pulse otra vez para salir</string>
+</resources>
