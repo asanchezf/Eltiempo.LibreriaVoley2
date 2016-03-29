@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
         btnResultado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                verclima();
+                //verclima();
+                borraDatos();
             }
         });
 
@@ -265,9 +266,10 @@ public class MainActivity extends AppCompatActivity {
                             txtbase.setText("Presión: "+presion+"mmHg"+" Humedad: "+humedad+"%");
                             txtwind.setText("Datos del viento: "+"Velocidad: "+speed.toString()+"km/h "+"Deg: "+deg.toString());
                             txtrespuesta.setText("Descripción del tiempo: "+" "+fin.toString());
-                            txtinformacion.setText("Resultado de las condiciones meteorológicas de " +txtciudad.getText());
+                            txtinformacion.setText("Resultado sobre la meteorología de " +txtciudad.getText());
 
-
+                            //btnResultado.setVisibility(View.VISIBLE);
+                            btnResultado.setEnabled(true);
 //                            response2.getString("lon");
 //                            response2.getString("lat");
 //                            String c= (String) response2.get(response2.getString("lon"));
@@ -318,6 +320,17 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public void borraDatos(){
+
+        txtcoordenadas.setText("");
+        txtciudad.setText("");
+        txtrespuesta.setText("");
+        txtinformacion.setText("");
+        txtwind.setText("");
+        txtclima.setText("");
+        txtbase.setText("");
     }
 
     @Override

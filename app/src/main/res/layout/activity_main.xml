@@ -76,21 +76,31 @@
             android:id="@+id/txtinformacion"
             android:layout_gravity="center_horizontal"
             android:textStyle="bold"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"/>
+            />
 
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="VER DATOS"
-            android:id="@+id/btnresultado" />
+            android:text="BORRAR DATOS"
+            android:id="@+id/btnresultado"
+            android:enabled="false"
+
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:background="@color/colorAccent"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Coordenadas"
-            android:id="@+id/txtcoordenadas" />
+            android:id="@+id/txtcoordenadas"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -118,6 +128,21 @@
             android:layout_height="wrap_content"
             android:text="Base"
             android:id="@+id/textbase" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:background="@color/colorAccent"/>
+
+        <ImageView
+            android:id="@+id/imgclima"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/clima"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+             />
 
     </LinearLayout>
 
