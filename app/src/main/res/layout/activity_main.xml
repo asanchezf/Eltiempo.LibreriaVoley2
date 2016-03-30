@@ -97,37 +97,38 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Coordenadas"
-            android:id="@+id/txtcoordenadas"
+            android:text="Temperatura"
+            android:id="@+id/txtclima"
             android:layout_marginTop="@dimen/activity_horizontal_margin"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Clima"
-            android:id="@+id/txtclima" />
+            android:text="Datos sobre el viento"
+            android:id="@+id/txtwind" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Wind"
-            android:id="@+id/txtwind" />
+            android:text="Presión atmosférica"
+            android:id="@+id/textbase" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Coordenadas"
+            android:id="@+id/txtcoordenadas"
+            />
 
         <TextView
             android:id="@+id/txtrespuesta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Resultado"
+            android:text="Comentario actualizado"
             android:layout_centerVertical="true"
 
             />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Base"
-            android:id="@+id/textbase" />
 
         <View
             android:layout_width="match_parent"
@@ -141,7 +142,7 @@
             android:layout_height="110dp"
             android:scaleType="centerCrop"
             android:src="@drawable/clima"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
+
              />
 
     </LinearLayout>

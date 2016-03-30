@@ -5,11 +5,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private Double temp_min;
     private Double temp_max;
     private Double speed;
-    private Double deg;
+   // private Double deg;No incluimos la desviación del tiempo
 
     private static final String LOGTAG = "LibreriaVoley2";//Constante para gestionar la escritura en el Log
     private CollapsingToolbarLayout ctlLayout;
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         ctlLayout = (CollapsingToolbarLayout) findViewById(R.id.ctlLayout);
         ctlLayout.setTitle("El tiempo");
 
-        FloatingActionButton btnfloat=(FloatingActionButton)findViewById(R.id.btnFab);
+         FloatingActionButton btnfloat=(FloatingActionButton)findViewById(R.id.btnFab);
 
         txtciudad = (EditText) findViewById(R.id.txtciudad);
         //txtpais = (EditText) findViewById(R.id.txtpais);
@@ -116,14 +118,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                verclima();
+                //Si no informan la ciudad no accedemos a la API...
+                if(txtciudad.getText().toString().equals("")) {
+
+                    Snackbar snack = Snackbar.make(v, R.string.ciudad, Snackbar.LENGTH_LONG);
+                    ViewGroup group = (ViewGroup) snack.getView();
+                    group.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    snack.show();
+                }
+                else {
+                    verclima(v);
+                }
             }
         });
 
 
     }
 
-    public void verclima() {
+    public void verclima(View v) {
 
         String ciudad = txtciudad.getText().toString();
         //String pais = txtpais.getText().toString();
@@ -176,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 JSONObject wind = response2.getJSONObject("wind");
                                 speed=wind.getDouble("speed");
-                                deg=wind.getDouble("deg");
+                                //deg=wind.getDouble("deg");
 
 //                                JSONObject weather = response2.getJSONObject("weather");
 //                                descripcion=weather.getString("description");
@@ -260,13 +272,14 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             String fin=sCadena.substring(posicioninicio, posicionfin);
+                            Double velocidad=  (speed*3.6);
 
                             txtcoordenadas.setText("Coordenadas: "+"Longitud: "+longitud.toString()+" -Latitud: "+latitud.toString());
                             txtclima.setText("Temperatura : "+temperatura.toString()+"ºC  Mín: "+temp_min.toString()+"ºC  Máx: "+temp_max.toString()+"ºC");
-                            txtbase.setText("Presión: "+presion+"mmHg"+" Humedad: "+humedad+"%");
-                            txtwind.setText("Datos del viento: "+"Velocidad: "+speed.toString()+"km/h "+"Deg: "+deg.toString());
+                            txtbase.setText("Presión: "+presion+"mbar"+" Humedad: "+humedad+"%");
+                            txtwind.setText("Datos del viento: "+"Velocidad: "+velocidad+" km/h ");
                             txtrespuesta.setText("Descripción del tiempo: "+" "+fin.toString());
-                            txtinformacion.setText("Resultado sobre la meteorología de " +txtciudad.getText());
+                            txtinformacion.setText("Resultado obtenido sobre la meteorología de " +txtciudad.getText());
 
                             //btnResultado.setVisibility(View.VISIBLE);
                             btnResultado.setEnabled(true);
@@ -308,6 +321,12 @@ public class MainActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Log.d(LOGTAG, "Error Respuesta en JSON: " + error.getMessage());
                         //txtrespuesta.setText(error.toString());
+                        txtinformacion.setText(R.string.conexionerror);
+
+                        Snackbar snack = Snackbar.make(txtinformacion,R.string.conexionerror, Snackbar.LENGTH_LONG);
+                        ViewGroup group = (ViewGroup) snack.getView();
+                        group.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                        snack.show();
 
                     }
                 }
