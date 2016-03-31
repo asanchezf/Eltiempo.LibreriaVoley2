@@ -225,10 +225,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 }
 
-
-
                             }
-
 
 ///////////////////////////////////////////////////////////////////////7///////////////////////////////
 /*                            //Para que nos dé la descripción del tiempo. se trata de un array.
