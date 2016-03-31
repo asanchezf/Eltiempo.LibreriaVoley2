@@ -1,5 +1,6 @@
 package antonioejemplo.com.libreriavoley2;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue requestQueue;//Cola de peticiones de Volley. se encarga de gestionar automáticamente el envió de las peticiones, la administración de los hilos, la creación de la caché y la publicación de resultados en la UI.
     //JsonObjectRequest jsArrayRequest;//Tipo de petición Volley utilizada...
     //private static String URL_BASE="http://api.openweathermap.org/data/2.5/weather?q=Madrid,ES&appid=b1b15e88fa797225412429c1c50c122a";
-    private TextView txtrespuesta, txtcoordenadas,txtbase,txtwind,txtclima,txtinformacion;
+    private TextView txtrespuesta, txtcoordenadas,txtbase,txtwind,txtclima,txtinformacion,txtnubes;
     private EditText txtciudad;
     //private EditText txtpais;
     private Button btnResultado;
@@ -55,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
     private Double temp_max;
     private Double speed;
    // private Double deg;No incluimos la desviación del tiempo
+    private int clouds;
+   private String id;
+    private String main2;
+    private String description;
+    private String icon;
+
+
 
     private static final String LOGTAG = "LibreriaVoley2";//Constante para gestionar la escritura en el Log
     private CollapsingToolbarLayout ctlLayout;
@@ -91,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         txtwind= (TextView) findViewById(R.id.txtwind);
         btnResultado = (Button) findViewById(R.id.btnresultado);
         txtinformacion=(TextView)findViewById(R.id.txtinformacion);
+        txtnubes=(TextView)findViewById(R.id.txtnubes);
 
         btnResultado.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +139,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else {
                     verclima(v);
+                    //Lineas para ocultar el teclado virtual (Hide keyboard)
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
             }
         });
@@ -169,16 +183,15 @@ public class MainActivity extends AppCompatActivity {
 
                         try {
 
-
                             for (int i = 0; i < response2.length(); i++) {
 
-                                //JSONObject c = cli.getJSONObject(i);
-
-                                //RECOJEMOS DATOS EN VARIABLES
+                                //RECOJEMOS DATOS EN VARIABLES:
+                                //coord
                                 JSONObject coord = response2.getJSONObject("coord");
                                  longitud = coord.getDouble("lon");
                                  latitud = coord.getDouble("lat");
 
+                                //main
                                 JSONObject main = response2.getJSONObject("main");
                                 temperatura = main.getDouble("temp");
                                 presion = main.getInt("pressure");
@@ -186,65 +199,39 @@ public class MainActivity extends AppCompatActivity {
                                 temp_min = main.getDouble("temp_min");
                                 temp_max = main.getDouble("temp_max");
 
+                                //wind
                                 JSONObject wind = response2.getJSONObject("wind");
                                 speed=wind.getDouble("speed");
                                 //deg=wind.getDouble("deg");
 
-//                                JSONObject weather = response2.getJSONObject("weather");
-//                                descripcion=weather.getString("description");
-                                //Log.v(LOGTAG,descripcion);
-
-                                /*response2.getString("weather");
-                                descripcion=response2.getString("weather");
-                                Log.v(LOGTAG,descripcion);*/
+                                //Nubes clouds
+                                JSONObject nubes = response2.getJSONObject("clouds");
+                                clouds=nubes.getInt("all");
 
 
-                                /*El objeto que devuelve Volley no es un array y weather sí lo es. Esto no funciona bien.*/
-                                //for (int j = 0; j < response2.getString("weather").length(); j++) {
-                                  //JSONObject json=response2.getJSONObject("weather");
-//
-//                                    main_weather = json.getString("main");
-//                                    descripcion = json.getString("description");
-//                                    icono = json.getString("icon");
+                                //"weather"--EN ESTE CASO ES UN ARRAY DE OBJETOS:
+                                JSONArray json_array =response2.getJSONArray("weather");
+                                //String description2="";
+                                //Log.v(LOGTAG, "Respuesta en JSON- valor descripción antes" + description);
+                                for (int z = 0; z < json_array.length(); z++) {
+                                    id=json_array.getJSONObject(z).getString("id");
+                                    main2=json_array.getJSONObject(z).getString("main");
+                                    description=json_array.getJSONObject(z).getString("description");
+                                    icon=json_array.getJSONObject(z).getString("icon");
+                                    //Pruebas:
+                                    //description2=json_array.getJSONObject(1).getString("description");
+                                    //Log.v(LOGTAG, "Respuesta en JSON- valor descripción después"+description);
+                                    //Log.v(LOGTAG, "Respuesta en JSON- valor descripción2 después"+description2);
 
-//                                    JSONObject json=response2.getJSONObject(String.valueOf(i));
-//                                    descripcion = json.getString("description");
-
-                                    /*JSONObject json=response2.getJSONObject("weather");
-                                    descripcion=json.getString("description");
-
-                                    Log.v(LOGTAG,descripcion);*/
-
-                                    /*JSONArray array=response2.getJSONArray("weather");
-                                    descripcion=array.getString(j);*/
-
-                                    //FUNCIONA pero se desarrolla abajo sin necesidad de un for
-                                    /*response2.getString("weather");
-                                    descripcion=response2.getString("weather");*/
-
-                                //}Fin del for
+                                }
 
 
-                                //SUBITEM CON LAS HABILIDADES
-                                /*JSONObject habilidades = c.getJSONObject("Habilidades");
-                                String fuerza = habilidades.getString("Fuerza");
-                                String espiritu = habilidades.getString("Espiritu");
-                                String fortaleza = habilidades.getString("Fortaleza");*/
-                            }
-
-
-                           // response2.getString("weather");
-                           // Log.v(LOGTAG, response2.getString("weather"));
-                            /*for (int z = 0; z < response2.length(); z++) {
-
-                                //main_weather = json.getString("main");
-                                main_weather =  response2.getString("main");
-                                descripcion = response2.getString("description");
-                                icono = response2.getString("icon");
 
                             }
-*/
-                            //Para que nos dé la descripción del tiempo. se trata de un array.Traido de Eclipse:
+
+
+///////////////////////////////////////////////////////////////////////7///////////////////////////////
+/*                            //Para que nos dé la descripción del tiempo. se trata de un array.
                             int posicioninicio=response2.getString("weather").indexOf("description")+13;//Posición que ocupa el carácter o la cadena dentro de una cadena...POsición 20 inicio
                             int posicionfin=0;
                             int coma=0;
@@ -252,65 +239,40 @@ public class MainActivity extends AppCompatActivity {
 
                             //Recorremos la cadena definida arriba y contamos el número de comas que hay en ella y su número de caracteres. Cuando sean tres dejamos de contar.
                         for(int i=0;i<response2.getString("weather").length();i++) {
-
                                 sCadena = sCadena + response2.getString("weather").charAt(i);
-
                                 //Según se va construyendo el string contamos las comas...
                                 if(sCadena.endsWith(","))	{
                                     coma++;
                                     //System.out.println("soy coma: "+coma);
                                 }
-
                                 //Mientras haya menos de 3 comas seguimos contando el número de caracteres a tener en cuenta en el substring final
                                 if (coma<3){
-
                                     posicionfin++;
                                     //System.out.println("soy posicionfin:"+posicionfin);
                                 }
-
-
                             }
+                            String fin=sCadena.substring(posicioninicio, posicionfin);*/
+////////////////////////////////////////////////////////////////////////////////////////
 
-                            String fin=sCadena.substring(posicioninicio, posicionfin);
                             Double velocidad=  (speed*3.6);
-
-                            txtcoordenadas.setText("Coordenadas: "+"Longitud: "+longitud.toString()+" -Latitud: "+latitud.toString());
-                            txtclima.setText("Temperatura : "+temperatura.toString()+"ºC  Mín: "+temp_min.toString()+"ºC  Máx: "+temp_max.toString()+"ºC");
-                            txtbase.setText("Presión: "+presion+"mbar"+" Humedad: "+humedad+"%");
-                            txtwind.setText("Datos del viento: "+"Velocidad: "+velocidad+" km/h ");
-                            txtrespuesta.setText("Descripción del tiempo: "+" "+fin.toString());
-                            txtinformacion.setText("Resultado obtenido sobre la meteorología de " +txtciudad.getText());
-
+                            //PINTAMOS LOS DATOS EN EL LAYOUT:
+                            txtcoordenadas.setText(String.format("Coordenadas: Longitud: %s -Latitud: %s", longitud.toString(), latitud.toString()));
+                            txtclima.setText(String.format("Temperatura : %sºC  Mín: %sºC  Máx: %sºC", temperatura.toString(), temp_min.toString(), temp_max.toString()));
+                            txtnubes.setText(String.format("Nubosidad: %d%%", clouds));
+                            txtbase.setText(String.format("Presión: %dmbar Humedad: %d%%", presion, humedad));
+                            txtwind.setText(String.format("Datos del viento: Velocidad: %s km/h ", velocidad));
+                            txtinformacion.setText(String.format("Resultado obtenido sobre la meteorología de %s", txtciudad.getText()));
+                            //txtrespuesta.setText("Descripción del tiempo: "+" "+fin.toString());
+                            //txtrespuesta.setText("Descripción del tiempo: "+" "+id+main2+description+icon);
+                            txtrespuesta.setText(String.format("Descripción del tiempo:  %s", description));
                             //btnResultado.setVisibility(View.VISIBLE);
                             btnResultado.setEnabled(true);
-//                            response2.getString("lon");
-//                            response2.getString("lat");
-//                            String c= (String) response2.get(response2.getString("lon"));
-//                            String latitud= (String) response2.get(response2.getString("lat"));
-
-                           /* JSONObject jsonlongitud=response2.getJSONObject("lon");
-
-                            double  longitud=jsonlongitud.getDouble(String.valueOf(jsonlongitud));
-                            JSONObject jsonlatitud=response2.getJSONObject("lat");
-                            String latitud=jsonlongitud.getString("lat");*/
-
-                            //JSONObject jobject = new JSONObject(aux);
-                            //int valor= jobject .getInt("suma");
-                            //response2.getString("coord").indexOf(",");
 
 
-
-                            /*int cadenabuscada=response2.getString("coord").indexOf(",");
-                            String longitud = response2.getString("coord").substring(1, cadenabuscada);
-                            String latitud=response2.getString("coord").substring(cadenabuscada + 1, (response2.getString("coord").length()-1));
-*/
-
-
-                            // txtcoordenadas.setText(jsonlongitud.toString());
-                           /* txtcoordenadas.setText(response2.getString("coord").substring(1,).toString());*/
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Log.d(LOGTAG, "Error Respuesta en JSON: " +description);
                         }
 
 
@@ -331,13 +293,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
+
         // Añadir petición a la cola
         requestQueue.add(jsArrayRequest);
-
-
-
-
-
 
     }
 
@@ -350,6 +309,7 @@ public class MainActivity extends AppCompatActivity {
         txtwind.setText("");
         txtclima.setText("");
         txtbase.setText("");
+        txtnubes.setText("");
     }
 
     @Override
