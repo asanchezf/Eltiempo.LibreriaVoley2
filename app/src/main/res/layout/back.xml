@@ -134,7 +134,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Estación meteorilógica"
+            android:text="Estación meteorológica"
             android:id="@+id/txtstation"
 
             />
