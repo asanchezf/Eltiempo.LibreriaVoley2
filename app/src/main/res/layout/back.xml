@@ -94,21 +94,57 @@
             android:background="@color/colorAccent"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             />
+
+
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/txtrespuesta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comentario actualizado"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textStyle="bold"/>
+
         <ImageView
             android:id="@+id/icono"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/sol"
+            android:visibility="invisible"
+
+
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/txtrespuesta"
+            android:layout_toEndOf="@+id/txtrespuesta" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorAccent"
+
             />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Estación meteorilógica"
+            android:id="@+id/txtstation"
 
+            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Temperatura"
             android:id="@+id/txtclima"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
+
             />
 
         <TextView
@@ -138,21 +174,11 @@
             android:id="@+id/txtcoordenadas"
             />
 
-        <TextView
-            android:id="@+id/txtrespuesta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Comentario actualizado"
-            android:layout_centerVertical="true"
-
-            />
-
-
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
+
             android:background="@color/colorAccent"/>
 
         <ImageView
@@ -161,9 +187,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/clima"
-
-
-             />
+            />
 
     </LinearLayout>
 
@@ -179,6 +203,3 @@
         app:layout_anchorGravity="bottom|right|end" />
 
 </android.support.design.widget.CoordinatorLayout>
-
-
-
